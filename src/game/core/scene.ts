@@ -4,7 +4,7 @@ import { Box } from './box';
 export class Scene {
     scene = new Scene3js();
 
-    add(box: Box) {
-        this.scene.add(box.mesh);
+    add(...box: Box[]) {
+        this.scene.add(...box.map((b) => b.mesh));
     }
 }
