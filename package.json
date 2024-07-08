@@ -1,0 +1,7 @@
+{
+  "name": "rubiks-cube",
+  "version": "1.0.0",
+  "description": "A rubiks cube application with 3js",
+  "author": "Hovhannes Sahakyan",
+  "license": "ISC"
+}
