@@ -13,8 +13,12 @@ export default {
         test: /\.(ts|tsx)$/,
         exclude: /node_modules/,
         use: 'babel-loader'
-      }
-    ]
+      },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({ template: 'index.html' })
@@ -22,5 +26,8 @@ export default {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'main.js'
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js']
   }
 }

@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
+import GameCanvas from './game/GameCanvas';
 
-// Clear the existing HTML content
-document.body.innerHTML = '<div id="app"></div>';
+import './main.css';
 
-// Render your React component instead
-const root = createRoot(document.getElementById('app')!);
-root.render(<h1>Hello, world!</h1>);
+const root = createRoot(document.getElementById('root')!);
+root.render(<Main />);
+
+function Main() {
+    return <GameCanvas />
+}
