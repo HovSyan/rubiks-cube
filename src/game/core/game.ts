@@ -12,7 +12,7 @@ export class Game {
     private _orbitControls: OrbitControls;
     private _animationFrameRequest: ReturnType<Window['requestAnimationFrame']> | undefined;
 
-    constructor(canvas: HTMLCanvasElement, gameDimensions = 10) {
+    constructor(canvas: HTMLCanvasElement, gameDimensions = 3) {
         this._renderer = new Renderer(canvas);
         this._createBoxes(gameDimensions)
         this._orbitControls = new OrbitControls(this._camera.camera, canvas);
@@ -47,6 +47,6 @@ export class Game {
                 }
             }
         }
-        this._scene.add(...boxes)
+        boxes.forEach((b) => b.appendToScene(this._scene));
     }
 }
