@@ -6,8 +6,11 @@ export class Camera extends Camera3js {
         super()
         this.position.z = 10;
         this.position.y = 10;
-        
         this.fov = 45;
-        WindowDimensions$.subscribe(({ aspect }) => this.aspect = aspect);
+
+        WindowDimensions$.subscribe(({ aspect }) => {
+            this.aspect = aspect;
+            this.updateProjectionMatrix();
+        });
     }
 }

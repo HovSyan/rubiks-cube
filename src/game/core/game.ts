@@ -14,10 +14,14 @@ export class Game {
     private _debugger: Debugger | null = null;
     private _orbitControls: OrbitControls;
 
-    constructor(canvas: HTMLCanvasElement, settings: Partial<IGameSettings> = {}) {
+    get canvas() {
+        return this._renderer.domElement;
+    }
+
+    constructor(settings: Partial<IGameSettings> = {}) {
         Object.assign(GameSettings, settings);
-        this._renderer = new Renderer(canvas);
-        this._orbitControls = new OrbitControls(this._camera, canvas);
+        this._renderer = new Renderer();
+        this._orbitControls = new OrbitControls(this._camera, this.canvas);
         this._orbitControls.autoRotate = true;
         this._createBoxes();
         (window as any).start = () => this.start();
