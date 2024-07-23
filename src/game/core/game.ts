@@ -1,33 +1,42 @@
-import { Box } from "./box";
+import { Box } from "./box/box";
 import { Scene } from "./scene";
 import { Renderer } from "./renderer";
 import { Camera } from "./camera";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Vector3 } from "three";
+import { Debugger } from "./debugger";
+import { GameSettings, IGameSettings } from "./settings";
 
 export class Game {
     private _renderer: Renderer;
     private _camera = new Camera();
     private _scene = new Scene();
+    private _debugger: Debugger | null = null;
     private _orbitControls: OrbitControls;
-    private _animationFrameRequest: ReturnType<Window['requestAnimationFrame']> | undefined;
 
-    constructor(canvas: HTMLCanvasElement, gameDimensions = 3) {
+    constructor(canvas: HTMLCanvasElement, settings: Partial<IGameSettings> = {}) {
+        Object.assign(GameSettings, settings);
         this._renderer = new Renderer(canvas);
-        this._createBoxes(gameDimensions)
-        this._orbitControls = new OrbitControls(this._camera.camera, canvas);
+        this._orbitControls = new OrbitControls(this._camera, canvas);
         this._orbitControls.autoRotate = true;
+        this._createBoxes();
+        (window as any).start = () => this.start();
+        (window as any).stop = () => this.stop();
+        (window as any).debug = () => this.debug();
+    }
+
+    debug() {
+        return this._debugger || (this._debugger = new Debugger(this._scene, this._orbitControls).start());
     }
 
     start(): this {
-        this._render();
         this._orbitControls.enabled = true;
+        this._renderer.setAnimationLoop(() => this._render());
         return this;
     }
 
     stop(): this {
-        this._animationFrameRequest && cancelAnimationFrame(this._animationFrameRequest);
-        this._animationFrameRequest = undefined;
+        this._renderer.setAnimationLoop(null);
         this._orbitControls.enabled = false;
         return this;
     }
@@ -35,18 +44,18 @@ export class Game {
     private _render() {
         this._renderer.render(this._scene, this._camera);
         this._orbitControls.update();
-        this._animationFrameRequest = requestAnimationFrame(() => this._render());
     }
 
-    private _createBoxes(N: number) {
-        const boxes = [] as Box[];
-        for(let i = 0; i < N; i++) {
-            for(let j = 0; j < N; j++) {
-                for(let k = 0; k < N; k++) {
-                    boxes.push(new Box(new Vector3(i - Math.floor(N / 2), j - Math.floor(N / 2), k - Math.floor(N / 2))))
+    private _createBoxes() {
+        const N = GameSettings.dimension;
+        const from = -Math.floor(N / 2);
+        const to = Math.floor(N / 2);
+        for(let i = from; i <= to; i++) {
+            for(let j = from; j <= to; j++) {
+                for(let k = from; k <= to; k++) {
+                    new Box(new Vector3(i, j, k)).appendToScene(this._scene);
                 }
             }
         }
-        boxes.forEach((b) => b.appendToScene(this._scene));
     }
 }

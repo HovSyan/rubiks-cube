@@ -1,14 +1,13 @@
-import { PerspectiveCamera as Camera3js, Vector3 } from 'three';
+import { PerspectiveCamera as Camera3js } from 'three';
 import { WindowDimensions$ } from './window-dimensions';
 
-export class Camera {
-    camera = new Camera3js(45, WindowDimensions$.value.aspect);
-
+export class Camera extends Camera3js {
     constructor() {
-        this.camera.position.z = 10;
-        this.camera.position.y = 10;
-        this.camera.up.set(0,0,1);
+        super()
+        this.position.z = 10;
+        this.position.y = 10;
         
-        WindowDimensions$.subscribe(({ aspect }) => this.camera.aspect = aspect);
+        this.fov = 45;
+        WindowDimensions$.subscribe(({ aspect }) => this.aspect = aspect);
     }
 }
