@@ -2,7 +2,7 @@ import { EdgesGeometry, Intersection, LineBasicMaterial, LineSegments, MeshBasic
 import { Box } from "./box/box";
 import { ColorBlack } from "./colors";
 
-export class Edges extends LineSegments {
+export class Edges extends LineSegments<EdgesGeometry, LineBasicMaterial> {
     constructor(box: Box) {
         super(new EdgesGeometry(box.geometry), new LineBasicMaterial({ color: ColorBlack, precision: 'highp', dithering: true, fog: false }))
         this.position.copy(box.position);

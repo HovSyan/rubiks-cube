@@ -6,11 +6,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Vector3 } from "three";
 import { Debugger } from "./debugger";
 import { GameSettings, IGameSettings } from "./settings";
+import { GameEventsService } from "./services";
 
 export class Game {
     private _renderer: Renderer;
     private _camera = new Camera();
     private _scene = new Scene();
+    private _eventsService = new GameEventsService(this._camera, this._scene);
     private _debugger: Debugger | null = null;
     private _orbitControls: OrbitControls;
 
@@ -22,7 +24,9 @@ export class Game {
         Object.assign(GameSettings, settings);
         this._renderer = new Renderer();
         this._orbitControls = new OrbitControls(this._camera, this.canvas);
-        this._orbitControls.autoRotate = true;
+        this._orbitControls.autoRotate = GameSettings.autoRotate;
+        this._eventsService.onPointerOver.subscribe((o) => o.active = true);
+        this._eventsService.onPointerLeave.subscribe((o) => o.active = false);
         this._createBoxes();
         (window as any).start = () => this.start();
         (window as any).stop = () => this.stop();
@@ -47,6 +51,7 @@ export class Game {
 
     private _render() {
         this._renderer.render(this._scene, this._camera);
+        this._eventsService.update();
         this._orbitControls.update();
     }
 

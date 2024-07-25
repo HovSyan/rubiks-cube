@@ -1,4 +1,4 @@
-import { Color, MeshBasicMaterial, Vector3 } from "three";
+import { MeshBasicMaterial, Vector3 } from "three";
 import { GameSettings } from "../settings";
 import { ColorBlue, ColorGreen, ColorOrange, ColorRed, ColorWhite, ColorYellow } from "../colors";
 
