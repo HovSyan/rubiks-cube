@@ -1,15 +1,15 @@
-import { BoxGeometry, Mesh, MeshBasicMaterial, Vector3 } from "three";
+import { BoxGeometry, Mesh, MeshBasicMaterial, ShaderMaterial, Vector3 } from "three";
 import { Edges } from "../edges";
 import { Scene } from "../scene";
-import { createMaterial } from "./box-material";
+import { createMaterial, U_ACTIVE } from "./box-material";
 
-export class Box extends Mesh<BoxGeometry, MeshBasicMaterial[]> {
+export class Box extends Mesh<BoxGeometry, ShaderMaterial[]> {
     edges: Edges;
 
     set active(v: boolean) {
         if (v === this._active) return;
         this._active = v;
-        console.log(this.uuid, this._active);
+        this.material.forEach((m) => m.uniforms[U_ACTIVE].value = v);
     }
 
     get active() {

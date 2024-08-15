@@ -18,6 +18,10 @@ export default {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
       },
+      {
+        test: /\.glsl$/i,
+        use: 'webpack-glsl-loader'
+      }
     ],
   },
   plugins: [

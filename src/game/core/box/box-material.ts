@@ -1,6 +1,8 @@
-import { MeshBasicMaterial, Vector3 } from "three";
+import { ShaderMaterial, Uniform, Vector3 } from "three";
 import { GameSettings } from "../settings";
 import { ColorBlue, ColorGreen, ColorOrange, ColorRed, ColorWhite, ColorYellow } from "../colors";
+import vertexShader from './shaders/vertex.shader.glsl';
+import fragmentShader from './shaders/fragment.shader.glsl';
 
 const enum BoxSides {
     EAST,
@@ -11,26 +13,37 @@ const enum BoxSides {
     NORTH,
 }
 
+export const U_COLOR = 'u_color';
+export const U_ACTIVE = 'u_active';
+
 export const createMaterial = (position: Vector3) => {
     const N = GameSettings.dimension;
-    const sides = Array.from({ length: 6 }, () => new MeshBasicMaterial());
+    const sides = Array.from({ length: 6 }, () => new ShaderMaterial({
+        uniforms: {
+            [U_COLOR]: new Uniform(new Vector3()),
+            [U_ACTIVE]: new Uniform(false),
+        },
+        vertexShader,
+        fragmentShader,
+    }));
+
     if (position.x === -Math.floor(N / 2)) {
-        sides[BoxSides.WEST].color = ColorGreen;
+        sides[BoxSides.WEST].uniforms[U_COLOR].value = ColorGreen.clone().convertLinearToSRGB();
     }
     if (position.x === Math.floor(N / 2)) {
-        sides[BoxSides.EAST].color = ColorYellow;
+        sides[BoxSides.EAST].uniforms[U_COLOR].value = ColorYellow.clone().convertLinearToSRGB();
     }
     if (position.y === -Math.floor(N / 2)) {
-        sides[BoxSides.DOWN].color = ColorBlue;
+        sides[BoxSides.DOWN].uniforms[U_COLOR].value = ColorBlue.clone().convertLinearToSRGB();
     }
     if (position.y === Math.floor(N / 2)) {
-        sides[BoxSides.UP].color = ColorWhite;
+        sides[BoxSides.UP].uniforms[U_COLOR].value = ColorWhite.clone().convertLinearToSRGB();
     }
     if (position.z === -Math.floor(N / 2)) {
-        sides[BoxSides.NORTH].color = ColorRed;
+        sides[BoxSides.NORTH].uniforms[U_COLOR].value = ColorRed.clone().convertLinearToSRGB();
     }
     if (position.z === Math.floor(N / 2)) {
-        sides[BoxSides.SOUTH].color = ColorOrange;
+        sides[BoxSides.SOUTH].uniforms[U_COLOR].value = ColorOrange.clone().convertLinearToSRGB();
     }
     return sides;
 }
