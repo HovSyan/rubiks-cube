@@ -27,6 +27,7 @@ export class Game {
         this._orbitControls.autoRotate = GameSettings.autoRotate;
         this._eventsService.onPointerOver.subscribe((o) => o.active = true);
         this._eventsService.onPointerLeave.subscribe((o) => o.active = false);
+        this._eventsService.onKeydown.subscribe(console.log);
         this._createBoxes();
         (window as any).start = () => this.start();
         (window as any).stop = () => this.stop();
