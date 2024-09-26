@@ -1,14 +1,11 @@
-import { EdgesGeometry, Intersection, LineBasicMaterial, LineSegments, MeshBasicMaterial, Raycaster } from "three";
-import { Box } from "./box/box";
+import { BoxGeometry, EdgesGeometry, Intersection, LineBasicMaterial, LineSegments, Mesh, Raycaster } from "three";
 import { ColorBlack } from "./colors";
 
 export class Edges extends LineSegments<EdgesGeometry, LineBasicMaterial> {
-    constructor(box: Box) {
+    constructor(box: Mesh<BoxGeometry, any>) {
         super(new EdgesGeometry(box.geometry), new LineBasicMaterial({ color: ColorBlack, precision: 'highp', dithering: true, fog: false }))
-        this.position.copy(box.position);
+        box.add(this);
     }
 
-    raycast(raycaster: Raycaster, intersects: Intersection[]): void {
-        return;
-    }
+    raycast(raycaster: Raycaster, intersects: Intersection[]) {}
 }

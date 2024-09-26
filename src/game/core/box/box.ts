@@ -1,11 +1,8 @@
-import { BoxGeometry, Mesh, MeshBasicMaterial, ShaderMaterial, Vector3 } from "three";
+import { BoxGeometry, Mesh, ShaderMaterial, Vector3 } from "three";
 import { Edges } from "../edges";
-import { Scene } from "../scene";
 import { createMaterial, U_ACTIVE } from "./box-material";
 
 export class Box extends Mesh<BoxGeometry, ShaderMaterial[]> {
-    edges: Edges;
-
     set active(v: boolean) {
         if (v === this._active) return;
         this._active = v;
@@ -21,10 +18,6 @@ export class Box extends Mesh<BoxGeometry, ShaderMaterial[]> {
     constructor(position: Vector3) {
         super(new BoxGeometry(1, 1, 1), createMaterial(position))
         this.position.copy(position);
-        this.edges = new Edges(this);
-    }
-
-    appendToScene(scene: Scene) {
-        scene.add(this, this.edges);
+        new Edges(this);
     }
 }

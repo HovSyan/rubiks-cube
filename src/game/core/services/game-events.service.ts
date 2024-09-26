@@ -10,12 +10,12 @@ import { Camera } from "../camera";
 import { Scene } from "../scene";
 import { PointerInteractionService } from "./pointer-interaction.service";
 import { Box } from "../box";
-import { AvailableKeys, KeyboardInteractionService } from "./keyboard-interaction.service";
+import { Key, KeyboardInteractionService } from "./keyboard-interaction";
 
 export class GameEventsService {
   onPointerOver: Observable<Box>;
   onPointerLeave: Observable<Box>;
-  onKeydown: Observable<typeof AvailableKeys[keyof typeof AvailableKeys]>;
+  onKeydown: Observable<Key>;
 
   private _pointerInteractionService: PointerInteractionService;
   private _keyboardInteractionService = new KeyboardInteractionService();

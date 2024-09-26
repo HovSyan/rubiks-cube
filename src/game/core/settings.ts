@@ -5,5 +5,5 @@ export interface IGameSettings {
 
 export const GameSettings: IGameSettings = {
     dimension: 3,
-    autoRotate: true
+    autoRotate: false
 };
