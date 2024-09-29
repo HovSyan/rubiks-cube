@@ -1,32 +1,32 @@
-import { Object3D, Quaternion, Vector3 } from "three";
+import { Object3D, Vector3 } from "three";
 import { Box } from "../box";
-import gsap from "gsap";
 import { Scene } from "../scene";
+import { RotationAnimation } from "./animation";
 
 export class RotationService {
+  private _animation: RotationAnimation | null = null;
+
   constructor(private _scene: Scene) {}
 
   rotateBoxes(boxes: Box[], axis: Vector3) {
+    if (this._animation?.isActive) {
+      return;
+    }
+
     const origin = new Object3D();
 
-    boxes.forEach((b) => origin.attach(b));
-    this._scene.add(origin);
-
-    const g = gsap
-      .fromTo({}, {}, { duration: 0.5 })
-      .eventCallback("onUpdate", () => {
-        origin.quaternion.slerpQuaternions(
-          new Quaternion(),
-          new Quaternion().setFromAxisAngle(axis, Math.PI / 2),
-          g.progress()
-        );
-      })
-      .eventCallback("onComplete", () => {
-        boxes.forEach((b) => {
-          this._scene.attach(b);
-          b.position.round();
+    this._animation = new RotationAnimation(origin, axis, {
+      onStart: () => {
+        boxes.forEach((b) => origin.attach(b));
+        this._scene.add(origin);
+      },
+      onComplete: () => {
+        [...origin.children].forEach((box) => {
+          this._scene.attach(box);
+          box.position.round();
         });
         this._scene.remove(origin);
-      });
+      }
+    }).start()
   }
 }

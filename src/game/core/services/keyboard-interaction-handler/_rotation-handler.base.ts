@@ -5,11 +5,8 @@ import { RotationService } from "../rotation.service";
 import { KeyboardHandler } from "./_handler.base";
 
 export abstract class RotationHandler extends KeyboardHandler {
-    protected rotationService: RotationService;
-
-    constructor(protected camera: Camera, protected scene: Scene) {
+    constructor(protected camera: Camera, protected scene: Scene, protected rotationService: RotationService) {
         super(scene);
-        this.rotationService = new RotationService(scene);
     }
 
     handle(): void {
