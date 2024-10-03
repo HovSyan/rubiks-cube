@@ -22,4 +22,8 @@ export class Scene extends Scene3js {
     getBoxesOnPlane(p: Plane) {
         return (this.children as Box[]).filter((b) => p.distanceToPoint(b.position) === 0);
     }
+
+    forEachBox(cb: (b: Box) => any) {
+        this.traverse((o) => (o instanceof Box) && cb(o));
+    }
 }

@@ -1,6 +1,6 @@
 import { ShaderMaterial, Uniform, Vector3 } from "three";
 import { GameSettings } from "../settings";
-import { ColorBlue, ColorGreen, ColorOrange, ColorRed, ColorWhite, ColorYellow } from "../colors";
+import { ColorBlack, ColorBlue, ColorGreen, ColorOrange, ColorRed, ColorWhite, ColorYellow } from "../colors";
 import vertexShader from './shaders/vertex.shader.glsl';
 import fragmentShader from './shaders/fragment.shader.glsl';
 
@@ -20,7 +20,7 @@ export const createMaterial = (position: Vector3) => {
     const N = GameSettings.dimension;
     const sides = Array.from({ length: 6 }, () => new ShaderMaterial({
         uniforms: {
-            [U_COLOR]: new Uniform(new Vector3()),
+            [U_COLOR]: new Uniform(ColorBlack),
             [U_ACTIVE]: new Uniform(false),
         },
         vertexShader,

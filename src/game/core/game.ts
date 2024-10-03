@@ -8,6 +8,7 @@ import { Debugger } from "./debugger";
 import { GameSettings, IGameSettings } from "./settings";
 import { GameEventsService } from "./services";
 import { KeyboardInteractionHandlerService } from "./services/keyboard-interaction-handler/service";
+import { SAVE_SLOTS, SaveService } from "./services/save.service";
 
 export class Game {
   private _renderer: Renderer;
@@ -18,6 +19,7 @@ export class Game {
     this._camera,
     this._scene
   );
+  private _saveService = new SaveService(this._scene);
   private _debugger: Debugger | null = null;
   private _orbitControls: OrbitControls;
 
@@ -62,6 +64,10 @@ export class Game {
     this._renderer.setAnimationLoop(null);
     this._orbitControls.enabled = false;
     return this;
+  }
+
+  loadGame(savedSlot: SAVE_SLOTS) {
+    this._saveService.loadSave(savedSlot);
   }
 
   private _render() {

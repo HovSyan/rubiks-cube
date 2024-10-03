@@ -1,4 +1,4 @@
-import { Color, ColorManagement } from "three";
+import { Color } from "three";
 
 export const ColorOrange = new Color('#FF5800');
 export const ColorBlue = new Color('#0046AD');
