@@ -1,8 +1,8 @@
 import { Plane, Vector3 } from "three";
-import { Camera } from "../../camera";
-import { Scene } from "../../scene";
-import { RotationService } from "../rotation.service";
-import { KeyboardHandler } from "./_handler.base";
+import { Camera } from "../../../camera";
+import { Scene } from "../../../scene";
+import { RotationService } from "../../rotation.service";
+import { KeyboardHandler } from "../_handler.base";
 
 export abstract class RotationHandler extends KeyboardHandler {
     constructor(protected camera: Camera, protected scene: Scene, protected rotationService: RotationService) {

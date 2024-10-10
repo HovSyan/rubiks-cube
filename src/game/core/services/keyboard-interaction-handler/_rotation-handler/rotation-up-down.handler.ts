@@ -1,5 +1,5 @@
 import { Vector3 } from "three";
-import { RotationHandler } from "./_rotation-handler.base";
+import { RotationHandler } from "./rotation-handler.base";
 
 const Pi = Math.PI;
 
