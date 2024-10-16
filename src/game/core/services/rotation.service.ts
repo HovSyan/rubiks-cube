@@ -2,6 +2,7 @@ import { Object3D, Vector3 } from "three";
 import { Box } from "../box";
 import { Scene } from "../scene";
 import { RotationAnimation } from "./animation";
+import { GameInnerEventsService } from "./inner-events";
 
 export class RotationService {
   private _animation: RotationAnimation | null = null;
@@ -25,6 +26,7 @@ export class RotationService {
           this._scene.attach(box);
           box.position.round();
         });
+        GameInnerEventsService.getInstance().emit('BOXES_ROTATED');
         this._scene.remove(origin);
       }
     }).start()

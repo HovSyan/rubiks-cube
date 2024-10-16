@@ -30,6 +30,10 @@ export class Debugger {
         return this;
     }
 
+    destroy() {
+        this._cleanup();
+    }
+
     private _cleanup() {
         this._axesHelper?.dispose();
 

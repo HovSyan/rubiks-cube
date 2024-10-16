@@ -1,0 +1,19 @@
+.toaster-message {
+    padding: 8px;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    animation: fadeOut var(--close-timeout) ease 1s forwards;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.toaster-message__text {
+    padding: 2px;
+}

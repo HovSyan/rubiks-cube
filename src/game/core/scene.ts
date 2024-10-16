@@ -48,4 +48,8 @@ export class Scene extends Scene3js {
     forEachBox(cb: (b: Box) => any) {
         this.traverse((o) => (o instanceof Box) && cb(o));
     }
+
+    destroy() {
+        this.clear();
+    }
 }

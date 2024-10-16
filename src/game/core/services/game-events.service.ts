@@ -5,6 +5,8 @@ import {
   Observable,
   pairwise,
   startWith,
+  Subject,
+  takeUntil,
 } from "rxjs";
 import { Camera } from "../camera";
 import { Scene } from "../scene";
@@ -19,6 +21,7 @@ export class GameEventsService {
 
   private _pointerInteractionService: PointerInteractionService;
   private _keyboardInteractionService = new KeyboardInteractionService();
+  private _destroySubject = new Subject<void>();
 
   constructor(camera: Camera, scene: Scene) {
     this._pointerInteractionService = new PointerInteractionService(
@@ -30,17 +33,26 @@ export class GameEventsService {
       startWith(null),
       pairwise(),
       filter(([prev, current]) => !!prev && prev !== current),
-      map(([prev]) => prev!)
+      map(([prev]) => prev!),
+      takeUntil(this._destroySubject),
     );
     this.onPointerOver = this._pointerInteractionService.hoveredObject$.pipe(
       map((o) => (o instanceof Box ? o : null)),
       distinctUntilChanged(),
-      filter((o) => !!o)
+      filter((o) => !!o),
+      takeUntil(this._destroySubject),
     );
-    this.onKeydown = this._keyboardInteractionService.onKeydown;
+    this.onKeydown = this._keyboardInteractionService.onKeydown.pipe(takeUntil(this._destroySubject));
   }
 
   update() {
     this._pointerInteractionService.update();
+  }
+
+  destroy() {
+    this._destroySubject.next();
+    this._destroySubject.complete();
+    this._keyboardInteractionService.destroy();
+    this._pointerInteractionService.destroy();
   }
 }

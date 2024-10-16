@@ -8,7 +8,10 @@ import { Debugger } from "./debugger";
 import { GameSettings, IGameSettings } from "./settings";
 import { GameEventsService } from "./services";
 import { KeyboardInteractionHandlerService } from "./services/keyboard-interaction-handler/service";
-import { SAVE_SLOTS, SaveService } from "./services/save.service";
+import { GameInnerEventsService } from "./services/inner-events";
+import { SAVE_SLOTS, SaveService } from "./services/save";
+
+export { SAVE_SLOTS };
 
 export class Game {
   private _renderer: Renderer;
@@ -25,6 +28,10 @@ export class Game {
 
   get canvas() {
     return this._renderer.domElement;
+  }
+
+  get events() {
+    return GameInnerEventsService.getInstance() as Pick<GameInnerEventsService, 'listen'>;
   }
 
   constructor(settings: Partial<IGameSettings> = {}) {
@@ -45,6 +52,7 @@ export class Game {
     (window as any).start = () => this.start();
     (window as any).stop = () => this.stop();
     (window as any).debug = () => this.debug();
+    (window as any).save = () => this._saveService.save(SAVE_SLOTS.SAVE_SLOT_AUTOSAVE);
   }
 
   debug() {
@@ -57,6 +65,7 @@ export class Game {
   start(): this {
     this._orbitControls.enabled = true;
     this._renderer.setAnimationLoop(() => this._render());
+    this._saveService.initAutosave();
     return this;
   }
 
@@ -68,6 +77,20 @@ export class Game {
 
   loadGame(savedSlot: SAVE_SLOTS) {
     this._saveService.loadSave(savedSlot);
+    return this;
+  }
+
+  destroy() {
+    this.stop();
+    this._renderer.destroy();
+    this._scene.destroy();
+    this._camera.destroy();
+    this._eventsService.destroy();
+    this._keyboardHandlerService.destroy();
+    this._saveService.destroy();
+    this._debugger?.destroy();
+    this._orbitControls.dispose();
+    GameInnerEventsService.destroyInstance();
   }
 
   private _render() {

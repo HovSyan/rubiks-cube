@@ -1,0 +1,9 @@
+.toaster-list {
+    position: fixed;
+    display: grid;
+    gap: 16px;
+    bottom: 0;
+    left: 0;
+    margin: 16px;
+    max-width: 300px;
+}

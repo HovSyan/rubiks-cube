@@ -21,6 +21,8 @@ export class KeyboardInteractionHandlerService {
         this._handlers.get(key)?.handle(key);
     }
 
+    destroy() {}
+
     private _setRotationHandlers() {
         this._handlers.set(leftArrow, new LeftRotationHandler(this._camera, this._scene, this._rotationService));
         this._handlers.set(rightArrow, new RightRotationHandler(this._camera, this._scene, this._rotationService));
