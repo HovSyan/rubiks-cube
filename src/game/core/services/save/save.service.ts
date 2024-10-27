@@ -28,10 +28,21 @@ export class SaveService {
   }
 
   loadSave(slot: SAVE_SLOTS) {
-    const boxes = new LoadService().load(slot);
-    if (boxes) {
-      this._scene.clear();
-      this._scene.add(...boxes);
+    const json = new LoadService().load(slot);
+
+    if (!json) {
+      return;
+    }
+
+    this._scene.clear().add(...json.boxes);
+    GameInnerEventsService.getInstance().emit('BOXES_SET', this._scene);
+
+    if (GameSettings.dimension !== json.meta.d) {
+      GameInnerEventsService.getInstance().emit('GAME_LOADED_WITH_DIFFERENT_DIMENSION', { 
+        from: GameSettings.dimension,
+        to: json.meta.d
+      })
+      GameSettings.dimension = json.meta.d;
     }
   }
 
@@ -48,10 +59,16 @@ export class SaveService {
   }
 
   private _getJSON(): SavedJSON {
-    const result: SavedJSON = [];
+    const boxes: SavedJSON['boxes'] = [];
     this._scene.forEachBox((b) => {
-      result.push(b.toJSON() as SavedJSON[number]);
+      boxes.push(b.toJSON() as SavedJSON['boxes'][number]);
     });
-    return result;
+    return { 
+      meta: {
+        d: GameSettings.dimension,
+        dt: new Date().toISOString(),
+      },
+      boxes
+    };
   }
 }

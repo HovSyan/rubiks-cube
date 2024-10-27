@@ -5,7 +5,14 @@ export const enum SAVE_SLOTS {
     SAVE_SLOT_3 = "SAVE_SLOT_3",
   }
   
-  export type SavedJSON = Array<
+  export type SavedJSON = {
+    meta: {
+      // dimension
+      d: number,
+      // date
+      dt: ReturnType<Date['toISOString']>,
+    }
+    boxes: Array<
     [
       // positions
       number,
@@ -25,3 +32,4 @@ export const enum SAVE_SLOTS {
       number
     ]
   >;
+}

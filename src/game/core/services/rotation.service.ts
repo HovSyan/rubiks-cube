@@ -3,6 +3,7 @@ import { Box } from "../box";
 import { Scene } from "../scene";
 import { RotationAnimation } from "./animation";
 import { GameInnerEventsService } from "./inner-events";
+import { roundVector } from "../utils";
 
 export class RotationService {
   private _animation: RotationAnimation | null = null;
@@ -24,7 +25,7 @@ export class RotationService {
       onComplete: () => {
         [...origin.children].forEach((box) => {
           this._scene.attach(box);
-          box.position.round();
+          roundVector(box.position)
         });
         GameInnerEventsService.getInstance().emit('BOXES_ROTATED');
         this._scene.remove(origin);

@@ -10,6 +10,7 @@ import { GameEventsService } from "./services";
 import { KeyboardInteractionHandlerService } from "./services/keyboard-interaction-handler/service";
 import { GameInnerEventsService } from "./services/inner-events";
 import { SAVE_SLOTS, SaveService } from "./services/save";
+import { getDimensionMinMaxCoordinates } from "./utils";
 
 export { SAVE_SLOTS };
 
@@ -100,15 +101,16 @@ export class Game {
   }
 
   private _createBoxes() {
-    const N = GameSettings.dimension;
-    const from = -Math.floor(N / 2);
-    const to = Math.floor(N / 2);
-    for (let i = from; i <= to; i++) {
-      for (let j = from; j <= to; j++) {
-        for (let k = from; k <= to; k++) {
-          this._scene.add(new Box(new Vector3(i, j, k)));
+    const { min, max } = getDimensionMinMaxCoordinates(GameSettings.dimension);
+    for (let i = min; i <= max; i++) {
+      for (let j = min; j <= max; j++) {
+        for (let k = min; k <= max; k++) {
+          if (i === min || j === min || k === min || i === max || j === max || k === max) {
+            this._scene.add(new Box(new Vector3(i, j, k)));
+          }
         }
       }
     }
+    GameInnerEventsService.getInstance().emit('BOXES_SET', this._scene)
   }
 }

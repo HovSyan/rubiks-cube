@@ -6,7 +6,12 @@
     align-items: center;
     gap: 8px;
     font-weight: 600;
-    animation: fadeOut var(--close-timeout) ease 1s forwards;
+    text-align: justify;
+    animation: fadeOut 2s ease var(--close-timeout) forwards;
+}
+
+.toaster-message:hover {
+    animation: none;
 }
 
 @keyframes fadeOut {

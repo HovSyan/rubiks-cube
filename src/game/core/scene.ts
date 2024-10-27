@@ -1,7 +1,6 @@
-import { Plane, Scene as Scene3js, Vector3 } from 'three';
+import { Plane, Scene as Scene3js } from 'three';
 import { Box } from './box';
 import { Camera } from './camera';
-import { GameSettings } from './settings';
 
 export class Scene extends Scene3js {
     private _activeBoxes = new Set<Box>();
@@ -18,6 +17,15 @@ export class Scene extends Scene3js {
         }
     }
 
+    allBoxesAreInViewport(camera: Camera, padding = 100) {
+        for (const box of this.children) {
+            if (box instanceof Box && !box.isInViewport(camera, padding)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     getNearestBoxFromCamera(camera: Camera) {
         let minDistance = this.children[0].position.distanceTo(camera.position);
         return this.children.reduce<Box>((result, current) => {
@@ -32,8 +40,7 @@ export class Scene extends Scene3js {
 
     getAdjacentBoxes(target: Box) {
         const result: Box[] = [];
-        const N = GameSettings.dimension;
-        this.forEachBox((b) => b.position.toArray().some((c) => Math.abs(c) === Math.floor(N / 2)) && b.position.distanceTo(target.position) === 1 && result.push(b));
+        this.forEachBox((b) => b.position.distanceTo(target.position) === 1 && result.push(b));
         return result;
     }
 

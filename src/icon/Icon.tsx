@@ -14,11 +14,20 @@ export const enum IconSize {
 
 export type IconProps = {
     name: SourceIcons;
-    size?: IconSize
+    size?: IconSize;
+    color?: string;
 }
 
-export default function Icon({ name, size }: IconProps) {
-    return <svg viewBox="0 0 24 24" width={`${size || 24}px`} height={`${size || 24}px`}>
+export default function Icon({ name, size, color }: IconProps) {
+    const sizeStr = `${size || 24}px`;
+    return <svg viewBox="0 0 24 24" 
+        width={sizeStr} height={sizeStr} 
+        style={{ 
+            minWidth: sizeStr, 
+            minHeight: sizeStr,
+            color
+        }}
+    >
         <use xlinkHref={'sprite.svg#' + name}></use>
     </svg>
 }
