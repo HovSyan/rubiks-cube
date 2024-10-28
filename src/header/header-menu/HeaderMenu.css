@@ -1,0 +1,42 @@
+.header-menu {
+    --border-width: 1px;
+    --border-color: white;
+
+    color: white;
+    display: flex;
+}
+
+.header-menu:hover {
+    cursor: pointer;
+}
+
+.header-menu__title {
+    padding: 0 4px 4px;
+    border-bottom: var(--border-width) solid var(--border-color);
+
+    transition: all .2s;
+}
+
+.header-menu:hover .header-menu__title {
+    text-shadow: 1px 1px 10px white;
+}
+
+.header-menu::before,
+.header-menu::after {
+    content: '';
+
+    width: 10px;
+    height: 100%;
+}
+
+.header-menu::before {
+    transform: rotate(-15deg);
+    transform-origin: 100% 100%;
+    border-right: var(--border-width) solid var(--border-color);
+}
+
+.header-menu::after {
+    transform: rotate(15deg);
+    transform-origin: 0 100%;
+    border-left: var(--border-width) solid var(--border-color);
+}
